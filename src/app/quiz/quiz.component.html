@@ -1,1 +1,22 @@
-<p>quiz works!</p>
+<h1 class="title">ZoomInfo Quiz</h1>
+
+<div *ngIf="questions$ | async as questions">
+  <p-carousel
+    #carousel
+    [value]="questions"
+    [numVisible]="1"
+    [numScroll]="1"
+    [circular]="false"
+    [showNavigators]="false"
+  >
+    <ng-template let-question pTemplate="item">
+      <app-question
+        *ngIf="question"
+        [item]="question"
+        (answer)="onSelect($event)"
+        (strikes)="onStrike($event)"
+        (timer)="onTimer()"
+      ></app-question>
+    </ng-template>
+  </p-carousel>
+</div>

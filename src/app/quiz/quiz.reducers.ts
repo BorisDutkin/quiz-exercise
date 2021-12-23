@@ -8,21 +8,22 @@ export interface QuizState {
 }
 
 export const initialState: QuizState = {
-  questions: [],
+  questions: Array.from({ length: 10 }),
 };
-
-// export const quizReducer = createReducer(
-//   initialState,
-//   on(fetchQuestion, (state, { question }) => [...state, question])
-// );
 
 export const quizFeature = createFeature({
   name: 'quiz',
   reducer: createReducer(
     initialState,
-    on(fetchQuestion, (state, { question }) => ({
-      questions: [...state.questions, question],
-    }))
+    on(fetchQuestion, (state, { question }) => {
+      const idx = state.questions.findIndex((q) => q === undefined);
+      let questions = state.questions.slice();
+      questions[idx] = question;
+
+      return {
+        questions,
+      };
+    })
   ),
 });
 

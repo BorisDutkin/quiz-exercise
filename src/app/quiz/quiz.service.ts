@@ -9,7 +9,11 @@ const QUESTION_URL = `https://opentdb.com/api.php?amount=1&encode=base64&type=mu
 
 interface QuestionAPIResponse {
   response_code: number;
-  results: Question[];
+  results: {
+    question: string;
+    correct_answer: string;
+    incorrect_answers: string[];
+  }[];
 }
 
 @Injectable({
@@ -23,9 +27,25 @@ export class QuizService {
       map((response) => response.results[0]),
       map(({ question, correct_answer, incorrect_answers }) => ({
         question: atob(question),
-        correct_answer: atob(correct_answer),
-        incorrect_answers: incorrect_answers.map((item) => atob(item)),
+        answers: this.shuffleArray([
+          ...incorrect_answers.map((answer: string) => ({
+            title: atob(answer),
+            correct: false,
+          })),
+          { title: atob(correct_answer), correct: true },
+        ]),
       }))
     );
+  }
+
+  shuffleArray(array: any[]): any[] {
+    let copy = array.slice();
+
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+
+    return copy;
   }
 }

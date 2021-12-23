@@ -1,5 +1,5 @@
 export interface Question {
+  index?: number;
   question: string;
-  correct_answer: string;
-  incorrect_answers: string[];
+  answers: { title: string; correct: boolean }[];
 }

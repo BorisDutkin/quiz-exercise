@@ -1,1 +1,18 @@
-<p>question works!</p>
+<div class="question" *ngIf="item">
+  <div class="question__header">
+    <h4 class="question__header--title"><span>Q:</span> {{ item.question }}</h4>
+    <div class="question__header--timer">
+      Time: ⌛ {{ timer$ | async }} <span>seconds</span>
+    </div>
+  </div>
+
+  <div class="question__answers">
+    <div
+      class="question__answers--item"
+      *ngFor="let answer of item.answers"
+      (click)="onAnswer(answer.correct); onStrike()"
+    >
+      {{ answer.title }}
+    </div>
+  </div>
+</div>
